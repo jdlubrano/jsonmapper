@@ -175,4 +175,128 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
             $jum->unmap($nested)
         );
     }
+
+    /**
+     * Test for an array of objects
+     */
+    public function testArrayOfObjects()
+    {
+        $jum = new JsonUnmapper();
+        $arr = array();
+        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1->str = 'String';
+        $obj1->int = 1;
+        $obj1->float = 1.2;
+        $obj1->bool = true;
+        $obj1->null = NULL;
+
+        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2->setStr('String2')
+            ->setInt(2)
+            ->setFloat(3.4)
+            ->setBool(false)
+            ->setNull(NULL);
+
+        $arr[] = $obj1;
+        $arr[] = $obj2;
+        
+        $this->assertEquals
+        (
+            '[{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
+            '{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}]',
+            $jum->unmap($arr)
+        );
+    }
+
+    /**
+     * Test for an array that is comprised of both primitives and an object.
+     */
+    public function testMixedArrayofObjectsAndPrimitives()
+    {
+        $jum = new JsonUnmapper();
+        $arr = array(1,"two",true,NULL);
+        
+        $obj = new JsonUnmapperTest_SimplePrivate();
+        $obj->setStr('String')
+            ->setInt(1)
+            ->setFloat(1.2)
+            ->setBool(true)
+            ->setNull(NULL);
+
+        $arr[] = $obj;
+
+        $this->assertEquals
+        (
+            '[1,"two",true,null,{"str":"String","int":1,"float":1.2,"bool":true,"null":null}]',
+            $jum->unmap($arr)
+        );
+    }
+
+    /**
+     * Test for an associative array of objects
+     */
+    public function testAssocArrayOfObjects()
+    {
+        $jum = new JsonUnmapper();
+        $arr = array();
+
+        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1->str = 'String';
+        $obj1->int = 1;
+        $obj1->float = 1.2;
+        $obj1->bool = true;
+        $obj1->null = NULL;
+
+        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2->setStr('String2')
+            ->setInt(2)
+            ->setFloat(3.4)
+            ->setBool(false)
+            ->setNull(NULL);
+
+        $arr['obj1'] = $obj1;
+        $arr['obj2'] = $obj2;
+
+        $this->assertEquals
+        (
+            '{"obj1":{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
+            '"obj2":{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}}',
+            $jum->unmap($arr)
+        );
+    }
+
+    /**
+     * Test for nested arrays of objects
+     */
+    public function testNestedObjectArray()
+    {
+        $jum = new JsonUnmapper();
+        $arr = array();
+
+        $arr[0] = array();
+
+        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1->str = 'String';
+        $obj1->int = 1;
+        $obj1->float = 1.2;
+        $obj1->bool = true;
+        $obj1->null = NULL;
+
+        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2->setStr('String2')
+            ->setInt(2)
+            ->setFloat(3.4)
+            ->setBool(false)
+            ->setNull(NULL);
+
+        $arr[0][] = $obj1;
+        $arr[0][] = $obj2;
+
+        $this->assertEquals
+        (
+            '[[{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
+            '{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}]]',
+            $jum->unmap($arr)
+        );
+    }
 }

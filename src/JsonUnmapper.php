@@ -16,10 +16,21 @@ class JsonUnmapper
     {
        $array = array();
 
-       if(strcasecmp(gettype($object), 'object') !== 0)
+       if((strcasecmp(gettype($object), 'object') !== 0) && (!is_array($object)))
        {
            return $object;
+
+       }else if(is_array($object))
+       {
+           foreach($object as &$val)
+           {
+               $val = $this->arrayify($val);
+           }
+
+           return $object;
        }
+
+       // The object is not a primitive nor an array.
 
        $rc = new ReflectionClass($object);
 
