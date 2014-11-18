@@ -181,16 +181,16 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayOfObjects()
     {
-        $jum = new JsonUnmapper();
+        $jum = new JsonSerializer();
         $arr = array();
-        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1 = new JsonSerializerTest_SimplePublic();
         $obj1->str = 'String';
         $obj1->int = 1;
         $obj1->float = 1.2;
         $obj1->bool = true;
         $obj1->null = NULL;
 
-        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2 = new JsonSerializerTest_SimplePrivate();
         $obj2->setStr('String2')
             ->setInt(2)
             ->setFloat(3.4)
@@ -204,7 +204,7 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
         (
             '[{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
             '{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}]',
-            $jum->unmap($arr)
+            $jum->jsonSerialize($arr)
         );
     }
 
@@ -213,10 +213,10 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMixedArrayofObjectsAndPrimitives()
     {
-        $jum = new JsonUnmapper();
+        $jum = new JsonSerializer();
         $arr = array(1,"two",true,NULL);
         
-        $obj = new JsonUnmapperTest_SimplePrivate();
+        $obj = new JsonSerializerTest_SimplePrivate();
         $obj->setStr('String')
             ->setInt(1)
             ->setFloat(1.2)
@@ -228,7 +228,7 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals
         (
             '[1,"two",true,null,{"str":"String","int":1,"float":1.2,"bool":true,"null":null}]',
-            $jum->unmap($arr)
+            $jum->jsonSerialize($arr)
         );
     }
 
@@ -237,17 +237,17 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAssocArrayOfObjects()
     {
-        $jum = new JsonUnmapper();
+        $jum = new JsonSerializer();
         $arr = array();
 
-        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1 = new JsonSerializerTest_SimplePublic();
         $obj1->str = 'String';
         $obj1->int = 1;
         $obj1->float = 1.2;
         $obj1->bool = true;
         $obj1->null = NULL;
 
-        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2 = new JsonSerializerTest_SimplePrivate();
         $obj2->setStr('String2')
             ->setInt(2)
             ->setFloat(3.4)
@@ -261,7 +261,7 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
         (
             '{"obj1":{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
             '"obj2":{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}}',
-            $jum->unmap($arr)
+            $jum->jsonSerialize($arr)
         );
     }
 
@@ -270,19 +270,19 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNestedObjectArray()
     {
-        $jum = new JsonUnmapper();
+        $jum = new JsonSerializer();
         $arr = array();
 
         $arr[0] = array();
 
-        $obj1 = new JsonUnmapperTest_SimplePublic();
+        $obj1 = new JsonSerializerTest_SimplePublic();
         $obj1->str = 'String';
         $obj1->int = 1;
         $obj1->float = 1.2;
         $obj1->bool = true;
         $obj1->null = NULL;
 
-        $obj2 = new JsonUnmapperTest_SimplePrivate();
+        $obj2 = new JsonSerializerTest_SimplePrivate();
         $obj2->setStr('String2')
             ->setInt(2)
             ->setFloat(3.4)
@@ -296,7 +296,7 @@ class JsonSerializerTest extends \PHPUnit_Framework_TestCase
         (
             '[[{"str":"String","int":1,"float":1.2,"bool":true,"null":null},'.
             '{"str":"String2","int":2,"float":3.4,"bool":false,"null":null}]]',
-            $jum->unmap($arr)
+            $jum->jsonSerialize($arr)
         );
     }
 }
