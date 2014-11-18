@@ -6,6 +6,6 @@ if (is_dir(__DIR__ . '/../src/')) {
     );
 }
 require_once 'JsonMapper.php';
-require_once 'JsonUnmapper.php';
+require_once 'JsonSerializer.php';
 require_once 'JsonMapper/Exception.php';
 ?>

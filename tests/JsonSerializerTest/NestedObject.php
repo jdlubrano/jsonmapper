@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Unit test helper for JsonUnmapper
+ * Unit test helper for JsonSerializer
  */
-class JsonUnmapperTest_NestedObject
+class JsonSerializerTest_NestedObject
 {
     public $pubNested;
     private $privNested;

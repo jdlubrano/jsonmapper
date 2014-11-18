@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Unit test helper class for testing public
- * property mapping
+ * Unit test helper class for JsonSerializer
  */
 
-class JsonUnmapperTest_SimplePublic
+class JsonSerializerTest_SimplePublic
 {
 	/**
 	 * @var string

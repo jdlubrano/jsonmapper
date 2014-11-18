@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Unit test helper for JsonUnmapper
+ * Unit test helper for JsonSerializer
  */
 
-class JsonUnmapperTest_ArrayProperties
+class JsonSerializerTest_ArrayProperties
 {
     public $pubArray;
     private $privArray;

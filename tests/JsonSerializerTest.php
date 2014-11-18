@@ -1,24 +1,24 @@
 <?php
 
 /**
- * Unit tests for JsonUnmapper
+ * Unit tests for JsonSerializer
  */
 
-require_once 'JsonUnmapperTest/SimplePublic.php';
-require_once 'JsonUnmapperTest/SimplePrivate.php';
-require_once 'JsonUnmapperTest/ArrayProperties.php';
-require_once 'JsonUnmapperTest/ObjectProperties.php';
-require_once 'JsonUnmapperTest/NestedObject.php';
+require_once 'JsonSerializerTest/SimplePublic.php';
+require_once 'JsonSerializerTest/SimplePrivate.php';
+require_once 'JsonSerializerTest/ArrayProperties.php';
+require_once 'JsonSerializerTest/ObjectProperties.php';
+require_once 'JsonSerializerTest/NestedObject.php';
 
-class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
+class JsonSerializerTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test for object with simple public members
 	 */
 	public function testSimplePublic()
 	{
-		$jum = new JsonUnmapper();
-		$simplePublic = new JsonUnmapperTest_SimplePublic();
+		$jum = new JsonSerializer();
+		$simplePublic = new JsonSerializerTest_SimplePublic();
 		$simplePublic->str = "String";
 		$simplePublic->int = 1;
 		$simplePublic->float = 1.2;
@@ -28,7 +28,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals
 		(
 			'{"str":"String","int":1,"float":1.2,"bool":true,"null":null}', 
-			$jum->unmap($simplePublic)
+			$jum->jsonSerialize($simplePublic)
 		);
 	}
 
@@ -37,8 +37,8 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimplePrivate()
     {
-        $jum = new JsonUnmapper();
-        $simplePrivate = new JsonUnmapperTest_SimplePrivate();
+        $jum = new JsonSerializer();
+        $simplePrivate = new JsonSerializerTest_SimplePrivate();
         $simplePrivate->setStr('String')
             ->setInt(1)
             ->setFloat(1.2)
@@ -48,7 +48,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals
         (
             '{"str":"String","int":1,"float":1.2,"bool":true,"null":null}',
-            $jum->unmap($simplePrivate)
+            $jum->jsonSerialize($simplePrivate)
         );
     }
 
@@ -57,14 +57,14 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function test1DArrayProperties()
     {
-        $jum = new JsonUnmapper();
-        $arrayProp = new JsonUnmapperTest_ArrayProperties();
+        $jum = new JsonSerializer();
+        $arrayProp = new JsonSerializerTest_ArrayProperties();
         $arrayProp->setPrivArray(array(1,2,3))->pubArray = array(4,5,6);
 
         $this->assertEquals
         (
             '{"pubArray":[4,5,6],"privArray":[1,2,3]}',
-            $jum->unmap($arrayProp)
+            $jum->jsonSerialize($arrayProp)
         );
     }
 
@@ -73,14 +73,14 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function test1DMixedArrayProperties()
     {
-        $jum = new JsonUnmapper();
-        $arrayProp = new JsonUnmapperTest_ArrayProperties();
+        $jum = new JsonSerializer();
+        $arrayProp = new JsonSerializerTest_ArrayProperties();
         $arrayProp->setPrivArray(array("one",2,3.2,false,NULL))->pubArray = array(0,"two",1.2,true);
         
         $this->assertEquals
         (
             '{"pubArray":[0,"two",1.2,true],"privArray":["one",2,3.2,false,null]}',
-            $jum->unmap($arrayProp)
+            $jum->jsonSerialize($arrayProp)
         );
     }
 
@@ -89,14 +89,14 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function test2DArrayProperties()
     {
-        $jum = new JsonUnmapper();
-        $arrayProp = new JsonUnmapperTest_ArrayProperties();
+        $jum = new JsonSerializer();
+        $arrayProp = new JsonSerializerTest_ArrayProperties();
         $arrayProp->setPrivArray(array(array(1,2,3),array(4,5,6)))->pubArray = array(0, array(4,5,6));
 
         $this->assertEquals
         (
             '{"pubArray":[0,[4,5,6]],"privArray":[[1,2,3],[4,5,6]]}',
-            $jum->unmap($arrayProp)
+            $jum->jsonSerialize($arrayProp)
         );
     }
 
@@ -105,10 +105,10 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleObjectProperties()
     {
-        $jum = new JsonUnmapper();
-        $objProp = new JsonUnmapperTest_ObjectProperties();
+        $jum = new JsonSerializer();
+        $objProp = new JsonSerializerTest_ObjectProperties();
         
-        $privObject = new JsonUnmapperTest_SimplePrivate();
+        $privObject = new JsonSerializerTest_SimplePrivate();
         $privObject->setStr('String')
             ->setInt(1)
             ->setFloat(1.2)
@@ -117,7 +117,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
 
         $objProp->setPrivObj($privObject);
 
-        $pubObject = new JsonUnmapperTest_SimplePublic();
+        $pubObject = new JsonSerializerTest_SimplePublic();
         $pubObject->str = 'String';
         $pubObject->int = 2;
         $pubObject->float = 3.4;
@@ -130,7 +130,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
         (
             '{"pubObj":{"str":"String","int":2,"float":3.4,"bool":false,"null":null},'.
             '"privObj":{"str":"String","int":1,"float":1.2,"bool":true,"null":null}}',
-            $jum->unmap($objProp)
+            $jum->jsonSerialize($objProp)
         );
     }
 
@@ -139,13 +139,13 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testNestedObjectProperties()
     {
-        $jum = new JsonUnmapper();
-        $nested = new JsonUnmapperTest_NestedObject();
+        $jum = new JsonSerializer();
+        $nested = new JsonSerializerTest_NestedObject();
 
-        $nested->pubNested = new JsonUnmapperTest_NestedObject();
-        $nested->setPrivNested(new JsonUnmapperTest_NestedObject());
+        $nested->pubNested = new JsonSerializerTest_NestedObject();
+        $nested->setPrivNested(new JsonSerializerTest_NestedObject());
 
-        $innerPubObj = new JsonUnmapperTest_SimplePublic();
+        $innerPubObj = new JsonSerializerTest_SimplePublic();
         $innerPubObj->str = 'Public String';
         $innerPubObj->int = 1;
         $innerPubObj->float = 1.2;
@@ -154,7 +154,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
 
         $nested->pubNested->pubNested = $innerPubObj;
 
-        $innerPrivObj = new JsonUnmapperTest_SimplePrivate();
+        $innerPrivObj = new JsonSerializerTest_SimplePrivate();
         $innerPrivObj->setStr('Private String')
             ->setInt(2)
             ->setFloat(2.3)
@@ -172,7 +172,7 @@ class JsonUnmapperTest extends \PHPUnit_Framework_TestCase
             '"privNested":{"str":"Private String","int":2,"float":2.3,"bool":false,"null":null}},'.
             '"privNested":{"pubNested":{"str":"Public String","int":1,"float":1.2,"bool":true,"null":null},'.
             '"privNested":{"str":"Private String","int":2,"float":2.3,"bool":false,"null":null}}}',
-            $jum->unmap($nested)
+            $jum->jsonSerialize($nested)
         );
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Unit test helper for JsonUnmapper
+ * Unit test helper for JsonSerializer
  */
 
-class JsonUnmapperTest_SimplePrivate
+class JsonSerializerTest_SimplePrivate
 {
     private $str;
     private $int;

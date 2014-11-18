@@ -1,6 +1,12 @@
 <?php
 
-class JsonUnmapper
+/**
+ * JsonSerializer Class
+ *
+ * Provides functionality to serialize a PHP
+ * object to JSON format.
+ */
+class JsonSerializer
 {
     /**
      * Converts the given object to a JSON string.
@@ -61,7 +67,7 @@ class JsonUnmapper
      *
      * @return string   The JSON representation of the object.
      */
-    public function unmap($object) 
+    public function jsonSerialize($object) 
     { 
         return json_encode($this->arrayify($object)); 
     }
